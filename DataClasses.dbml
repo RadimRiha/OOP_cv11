@@ -1,0 +1,37 @@
+﻿<?xml version="1.0" encoding="utf-8"?><Database Name="vyuka" Class="DataClassesDataContext" xmlns="http://schemas.microsoft.com/linqtosql/dbml/2007">
+  <Connection Mode="AppSettings" ConnectionString="Data Source=(LocalDB)\MSSQLLocalDB;AttachDbFilename=|DataDirectory|\vyuka.mdf;Integrated Security=True;Connect Timeout=30" SettingsObjectName="OOP_cv11.Properties.Settings" SettingsPropertyName="vyukaConnectionString" Provider="System.Data.SqlClient" />
+  <Table Name="dbo.Attendance" Member="Attendances">
+    <Type Name="Attendance">
+      <Column Name="StudentID" Type="System.Int32" DbType="Int NOT NULL" IsPrimaryKey="true" CanBeNull="false" />
+      <Column Name="SubjectAbbreviation" Type="System.String" DbType="Char(8) NOT NULL" IsPrimaryKey="true" CanBeNull="false" />
+      <Association Name="Attendance_Grading" Member="Grading" ThisKey="StudentID,SubjectAbbreviation" OtherKey="StudentID,SubjectAbbreviation" Type="Grading" Cardinality="One" />
+      <Association Name="Subject_Attendance" Member="Subject" ThisKey="SubjectAbbreviation" OtherKey="Abbreviation" Type="Subject" IsForeignKey="true" DeleteRule="CASCADE" DeleteOnNull="true" />
+      <Association Name="Student_Attendance" Member="Student" ThisKey="StudentID" OtherKey="ID" Type="Student" IsForeignKey="true" DeleteRule="CASCADE" DeleteOnNull="true" />
+    </Type>
+  </Table>
+  <Table Name="dbo.Subjects" Member="Subjects">
+    <Type Name="Subject">
+      <Column Name="Abbreviation" Type="System.String" DbType="Char(8) NOT NULL" IsPrimaryKey="true" CanBeNull="false" />
+      <Column Name="SubjectName" Type="System.String" DbType="VarChar(60)" CanBeNull="true" />
+      <Association Name="Subject_Attendance" Member="Attendances" ThisKey="Abbreviation" OtherKey="SubjectAbbreviation" Type="Attendance" />
+    </Type>
+  </Table>
+  <Table Name="dbo.Grading" Member="Gradings">
+    <Type Name="Grading">
+      <Column Name="StudentID" Type="System.Int32" DbType="Int NOT NULL" IsPrimaryKey="true" CanBeNull="false" />
+      <Column Name="SubjectAbbreviation" Type="System.String" DbType="Char(8) NOT NULL" IsPrimaryKey="true" CanBeNull="false" />
+      <Column Name="GradingDate" Type="System.DateTime" DbType="Date" CanBeNull="true" />
+      <Column Name="Grade" Type="System.Double" DbType="Float NOT NULL" CanBeNull="false" />
+      <Association Name="Attendance_Grading" Member="Attendance" ThisKey="StudentID,SubjectAbbreviation" OtherKey="StudentID,SubjectAbbreviation" Type="Attendance" IsForeignKey="true" />
+    </Type>
+  </Table>
+  <Table Name="dbo.Students" Member="Students">
+    <Type Name="Student">
+      <Column Name="Firstname" Type="System.String" DbType="VarChar(50) NOT NULL" CanBeNull="false" />
+      <Column Name="Surname" Type="System.String" DbType="VarChar(50) NOT NULL" CanBeNull="false" />
+      <Column Name="DateOfBirth" Type="System.DateTime" DbType="Date" CanBeNull="true" />
+      <Column Name="ID" Type="System.Int32" DbType="Int NOT NULL" IsPrimaryKey="true" CanBeNull="false" />
+      <Association Name="Student_Attendance" Member="Attendances" ThisKey="ID" OtherKey="StudentID" Type="Attendance" />
+    </Type>
+  </Table>
+</Database>
