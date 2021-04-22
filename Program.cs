@@ -17,11 +17,15 @@ namespace OOP_cv11
 
             var subAvg = from g in db.Gradings
                          group g by g.SubjectAbbreviation into s
-                         select s.First();
+                         select new
+                         {
+                             s.Key,
+                             average = s.Average(p => p.Grade)
+                         };
 
-            foreach (Grading a in subAvg)
+            foreach (var entry in subAvg)
             {
-                Console.WriteLine(a);
+                Console.WriteLine("Subject: {0} Average grade: {1}", entry.Key, entry.average);
             }
         }
         public static void FillDatabase(DataClassesDataContext db)
